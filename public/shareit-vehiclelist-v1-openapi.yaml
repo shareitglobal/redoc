@@ -2,11 +2,89 @@ openapi: 3.0.0
 info:
   title: "Bloxcar vehicles API"
   version: "v1"
+  description: |
+    # Example queries
+
+    Get vehicles with in 3 kilometer radius from Helsingin rautatieasema and sorted by closest one first.
+
+    ```
+    https://bloxcar.fi/vehiclelist
+    ?at=60.16956743967486,24.94106769561768
+    &sort=distance,asc
+    &distance=3
+    ```
+
+    ***
+
+    Get vans with in 11 kilometer radius from Espoon asema and closest one first
+
+    ```
+    https://bloxcar.fi/vehiclelist
+    ?filter=vehicle_type,van
+    &at=60.204386,24.654387
+    &sort=distance,asc
+    &distance=11
+    ```
+
+    ***
+
+    Get 20 first vehicles which title contains "tesla"
+
+    ```
+    https://bloxcar.fi/vehiclelist
+    ?search=title,contains,tesla
+    &range=1,20
+    ```
+
+    *** 
+
+    Get vehicles with in 10 kilometer radius from Tampere city center which are available for rent from 16 January 2020 to 17 January 2020, pick-up and return time at 16:00
+
+    ```
+    https://bloxcar.fi/vehiclelist
+    ?at=61.498584,23.77384
+    &sort=distance,asc
+    &availability=2020-01-16T16:00:00,2020-01-17T16:00:00
+    &distance=10
+    ```
+
+    ***
+
+    Fetching only `id, prices and availability` -data for smaller payload and faster request
+
+
+    ```
+    https://bloxcar.fi/vehiclelist
+    ?show=id,prices,availability
+    ```
 servers:
   - url: 'https://bloxcar.fi/vehiclelist/v1'
+produces:
+  - "application/json"
+x-tagGroups:
+  - name: Vehiclelist API
+    tags:
+      - vehicles
+  - name: Models
+    tags:
+      - availability_model
+      - vehicle_model
+tags:
+  - name: vehicles
+    description: Vehiclelist
+  - name: vehicle_model
+    x-displayName: Vehicle Model
+    description:
+      <SchemaDefinition schemaRef="#/components/schemas/Vehicle" />
+  - name: availability_model
+    x-displayName: Availability Model
+    description:
+      <SchemaDefinition schemaRef="#/components/schemas/Availability" />
 paths:
   /vehicles:
     get:
+      tags:
+        - vehicles
       operationId: "listVehicles"
       summary: "List vehicles"
       parameters:
