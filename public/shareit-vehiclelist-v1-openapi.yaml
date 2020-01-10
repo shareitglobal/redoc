@@ -1,0 +1,253 @@
+openapi: 3.0.0
+info:
+  title: "Bloxcar vehicles API"
+  version: "v1"
+servers:
+  - url: 'https://bloxcar.fi/vehiclelist/v1'
+paths:
+  /vehicles:
+    get:
+      operationId: "listVehicles"
+      summary: "List vehicles"
+      parameters:
+        - description: "Range header for paging"
+          example: "vehicles=1-30"
+          in: "header"
+          name: "Range"
+          required: false
+          schema:
+            type: "string"
+        - description: "Range parameter for paging"
+          example: "30,60"
+          in: "query"
+          name: "range"
+          required: false
+          schema:
+            type: "string"
+        - description: "Get vehicles given by id. Comma separated list."
+          in: "query"
+          name: "ids"
+          required: false
+          schema:
+            type: "string"
+          example: "2,3,5"
+        - description: "Limit result to vehicles matching listed attribute values. All if void. Comma separated list of filter_key, filter_value pairs."
+          in: "query"
+          name: "filter"
+          required: false
+          schema:
+            type: "string"
+          example: "vehicle_type,passenger_car"
+        - description: "Attribute filter. Limit result to listed attributes, all if void. Comma separated list of attribute names."
+          in: "query"
+          name: "show"
+          required: false
+          schema:
+            type: "string"
+          example: "id,maker,model"
+        - description: "Search vehicles matching condition. A tuple of search_key,search_condition,search_value. Search conditions are: exact, contains, greater_than, less_than. If key is given as any and condition as contains, all attributes are searched for the given string (full text search)."
+          in: "query"
+          name: "search"
+          required: false
+          schema:
+            type: "string"
+          example: "maker,startswith,Volks"
+        - description: "Point of location. Needed in proximity search of vehicles to calculate virtual attribute distance."
+          in: "query"
+          name: "at"
+          required: false
+          schema:
+            type: "string"
+          example: "60.234235,24.565774"
+        - description: "Sort results based on given attribute in given order."
+          in: "query"
+          name: "sort"
+          required: false
+          schema:
+            type: "string"
+          example: "distance,desc"
+        - description: "Get vehicles available for rent during period. Takes 2 ISO formatted datetimes separated by comma."
+          in: "query"
+          name: "availability"
+          required: false
+          schema:
+            type: "string"
+          example: "2020-01-10T16:15:00,2020-01-18T16:15:00"
+      responses:
+        '200':
+          description: An array of vehicles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicles'
+        '206':
+          description: A paged array of vehicles
+          headers:
+            Content-Range:
+              schema:
+                type: string
+                example: vehicle 1-100/500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicles'
+components:
+  schemas:
+    Availability:
+      title: "Availability"
+      type: "object"
+      properties:
+        start:
+          description: "start time of availability"
+          type: "string"
+          example: '2018-07-01T00:00:00'
+        end:
+          description: "end time of availability"
+          type: "string"
+          example: '2018-09-04T10:00:00'
+    Vehicles:
+      type: "array"
+      items:
+        $ref: '#/components/schemas/Vehicle'
+    Vehicle:
+      properties:
+        average_rating:
+          description: "Average rating for vehicle"
+          type: "number"
+          example: 3.5
+        seating_capacity:
+          description: "Vehicle seating capacity"
+          type: "integer"
+          example: 5
+        availability:
+          type: "array"
+          items:
+            $ref: '#/components/schemas/Availability'
+        added:
+          description: "Time when vehicle is added to system"
+          type: "string"
+          example: '2018-06-25T10:00:00.7645'
+        timezone:
+          description: "Vehicle timezone"
+          type: "string"
+          example: "Europe/Helsinki"
+        id:
+          description: "Vehicle Id"
+          type: "number"
+          example: 184
+        image:
+          description: "Vehicle image url"
+          type: "string"
+          example: >-
+            https://s3-eu-west-1.amazonaws.com/prod-shareit-bloxcar/e12432fe-71c6-48c0-8775-4dcb176fdd52.jpeg
+        maker:
+          description: "Vehicle maker"
+          type: "string"
+          example: "Volvo"
+        model:
+          description: "model of the vehicle"
+          type: "string"
+          example: "V40"
+        position:
+          description: "The position of the vehicle expressed as geojson Feature object"
+          type: "object"
+          properties:
+            type:
+              type: "string"
+              enum: ["Feature"]
+            geometry:
+              type: "object"
+              properties:
+                type:
+                  type: "string"
+                  enum: ["Point"]
+                coordinates:
+                  type: "array"
+                  items:
+                    type: "number"
+                  minLength: 2
+                  maxLength: 2
+            properties:
+              type: "object"
+              properties:
+                address:
+                  description: "Address"
+                  type: "string"
+                  example: "Kyyhkystie 2"
+                area:
+                  description: "Area in city"
+                  type: "string"
+                  example: "Lintuvaara"
+                city:
+                  description: "Location city"
+                  type: "string"
+                description:
+                  description: "Location description"
+                  type: "string"
+                  example: "Parking slot number 10"
+                zipcode:
+                  description: "Zipcode"
+                type:
+                  type: "string"
+        prices:
+          description: Vehicle prices
+          items:
+            description: Vehicle pricing
+            properties:
+              extra_km_price:
+                description: the price per kilometer
+                type: number
+                example: 0.2
+              free_km:
+                description: the number of free_km per unit time
+                type: number
+                example: 200
+              price:
+                description: the price for the unit
+                type: number
+                example: 35
+              pricing:
+                description: >-
+                  (daily, hourly, weekly): the time unit considered for these
+                  prices
+                type: string
+                example: daily
+            title: Vehicle pricing
+            type: object
+          type: array
+        short_description:
+          type: array
+          description: Short vehicle description by language
+          items:
+            type: object
+            description: short description object
+            properties:
+              language:
+                type: string
+                description: language of description
+                example: fi
+              content:
+                type: string
+                example: Mukava auto pidemmällekkin matkalle
+                description: short description content
+        title:
+          description: 'A title made of the vehicle model, maker, and register'
+          type: string
+          example: Volkswagen Passat
+        web_url:
+          description: the web url of the current vehicle
+          type: string
+          example: 'https://bloxcar.fi/vehicles/5'
+        year:
+          description: Vehicle first register year
+          type: integer
+          example: 2012
+        vehicle_type:
+          description: Categorized vehicle type
+          type: "string"
+          enum: [van, passenger_car, electric_car, coupe, suv, minivan, convertible, trailer, antique_car, caravan_trailer, camper_van, boat_trailer]
+        distance:
+          description: Vehicle distance from location
+          type: "integer"
+      title: Vehicle
+      type: object
