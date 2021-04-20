@@ -1,0 +1,158 @@
+{
+  "$id": "https://bloxcar.fi/redoc/schemas/reservation.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Reservation",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "user_id": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "username": {
+      "type": [
+        "string"
+      ]
+    },
+    "vehicle_id": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "paid",
+        "return_approved",
+        "return_hold",
+        "owner_rejected",
+        "user_rejected",
+        "system_rejected",
+        "owner_cancelled",
+        "user_cancelled"
+      ]
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "responded": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cancelled": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "begin": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "distance_estimate": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "price_hourly_base": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "price_daily_base": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "vat": {
+      "type": "number"
+    },
+    "insurance": {
+      "type": "string"
+    },
+    "lease_begin": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "lease_end": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "lease_distance": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "comment_admin": {
+      "type": "string"
+    },
+    "comment_owner": {
+      "type": "string"
+    },
+    "comment_user": {
+      "type": "string"
+    },
+    "odometer_begin": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "odometer_end": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "lease_missing_fuel": {
+      "type": "number"
+    },
+    "user_campaign_code": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "owner_campaign_code": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ratings": {
+      "type": "object",
+      "properties": {
+        "owner": {
+          "$ref": "user-rating.json#/definitions/rating"
+        },
+        "user": {
+          "$ref": "user-rating.json#/definitions/rating"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

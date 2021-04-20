@@ -1,0 +1,27 @@
+{
+  "$id": "https://bloxcar.fi/redoc/schemas/user-rating.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Rating",
+  "type": "object",
+  "definitions": {
+    "rating": {
+      "type": "object",
+      "properties": {
+        "rating": {
+          "type": "number"
+        },
+        "content_public": {
+          "type": "string"
+        },
+        "content_private": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

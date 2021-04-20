@@ -1,0 +1,142 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Bloxcar reservation API specification",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://bloxcar.fi/rb"
+    }
+  ],
+  "paths": {
+    "/reservations": {
+      "get": {
+        "description": "Returns all reservations from the reservation backend",
+        "responses": {
+          "200": {
+            "description": "A list of Bloxcar reservations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "schemas/reservation.json"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "ids",
+          "in": "query",
+          "description": "List of reservation IDs to be filtered",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "vehicles",
+          "in": "query",
+          "description": "List of vehicle IDs to be filtered",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "owners",
+          "in": "query",
+          "description": "List of owner IDs to be filterd",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "renters",
+          "in": "query",
+          "description": "List of renter IDs to be filtered",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "/reservations/{id}": {
+      "get": {
+        "description": "Returns all reservations from the reservation backend",
+        "responses": {
+          "200": {
+            "description": "A list of Bloxcar reservations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "schemas/reservation.json"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Update reservation with new reservation JSON",
+        "responses": {
+          "200": {
+            "description": "Returns updated reservation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "schemas/reservation.json"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Update reservation with partial JSON",
+        "responses": {
+          "200": {
+            "description": "Returns updated reservation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "schemas/reservation.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bloxcar_auth": [
+        "read:reservation",
+        "write:reservation"
+      ]
+    }
+  ]
+}
