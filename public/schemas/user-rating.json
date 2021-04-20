@@ -8,7 +8,15 @@
       "type": "object",
       "properties": {
         "rating": {
-          "type": "number"
+          "type": "number",
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
         },
         "content_public": {
           "type": "string"
